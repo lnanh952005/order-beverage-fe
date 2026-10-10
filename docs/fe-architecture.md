@@ -146,11 +146,11 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Page --> Component --> Hook --> Api[*.api.ts] --> HC[http-client] --> BE[(Backend)]
+    Page --> Component --> Hook --> Services[services/] --> HC[http-client] --> BE[(Backend)]
     Hook <--> QC[(TanStack Query cache)]
 ```
 
-- Pages/components never call `*.api.ts` or `fetch`; hooks are the only bridge.
+- Pages/components never call `services/` or `fetch`; hooks are the only bridge.
 - `http-client` unwraps the success envelope and throws `ApiError` for the error envelope.
 
 ### 4.3 State architecture

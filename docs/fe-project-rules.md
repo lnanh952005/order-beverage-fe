@@ -41,70 +41,66 @@
 ```
 fe/
 ├─ public/
+├─ index.html                     # Entry HTML file
 └─ src/
-   ├─ main.tsx                    # entry: render <App />
-   ├─ app/
-   │  ├─ App.tsx
-   │  ├─ providers.tsx            # QueryClientProvider, AuthProvider, Toaster, ErrorBoundary
-   │  ├─ router.tsx               # composes feature route modules
-   │  ├─ guards/                  # RequireAuth.tsx, RequireRole.tsx
-   │  └─ layouts/                 # CustomerLayout, AdminLayout, AuthLayout
-   ├─ features/
-   │  ├─ auth/                    # login, register, Google sign-in, session
-   │  ├─ profile/                 # profile + addresses
-   │  ├─ catalog/                 # menu, product detail, admin product/category/option mgmt
-   │  ├─ cart/                    # cart page + cart hooks
-   │  ├─ promotions/              # voucher input, admin vouchers
-   │  ├─ orders/                  # checkout, my orders, tracking, admin order board
-   │  ├─ payments/                # payment method selector component (for checkout), admin refund
-   │  └─ admin-reports/           # sales + top-products dashboards
-   ├─ shared/
-   │  ├─ api/                     # http-client.ts, api-error.ts, token-storage.ts, query-client.ts
-   │  ├─ components/
-   │  │  ├─ ui/                   # Button, Input, Select, Modal, Badge, Table, Pagination
-   │  │  └─ feedback/             # Spinner, Skeleton, ErrorState, EmptyState
-   │  ├─ hooks/                   # useDebounce, usePagination, useDocumentTitle
-   │  ├─ lib/                     # format-money.ts, format-date.ts, cn.ts, error-messages.ts
-   │  ├─ constants/               # roles.ts, order-status.ts, routes.ts
-   │  ├─ types/                   # api.types.ts (envelope, pagination), common.types.ts
-   │  └─ styles/                  # globals.css, tokens
-   ├─ config/
-   │  └─ env.ts                   # Zod-validated import.meta.env (single place)
-   └─ test/                       # setup.ts, msw handlers, test-utils.tsx
+   ├─ core/                       # Global configurations, assets, context providers, styles
+   │  ├─ assets/
+   │  │  └─ css/
+   │  │     └─ App.css
+   │  └─ config/                  # App-wide config files (e.g., api config, constants)
+   │     └─ env.ts
+   ├─ layouts/                    # Application-level layouts
+   │  ├─ Header.tsx
+   │  └─ FullLayout.tsx
+   ├─ features/                   # Feature-based modules
+   │  └─ <feature-name>/          # Self-contained feature directory
+   │     ├─ components/           # Feature-specific UI components
+   │     ├─ hooks/                # Feature-specific hooks
+   │     ├─ types/                # Feature-specific TypeScript types
+   │     ├─ pages/                # Feature screens / pages
+   │     ├─ services/             # Feature API calls / HTTP services
+   │     ├─ routes.ts             # Feature route definitions
+   │     └─ context.md            # Feature context and business rules documentation
+   ├─ router.ts                   # Application-wide routing
+   └─ main.tsx                    # React entry point
 ```
 
 ### Anatomy of one feature (example: `orders`)
 
 ```
 features/orders/
-├─ orders.api.ts                  # typed HTTP calls only (no React)
-├─ orders.keys.ts                 # query key factory
-├─ orders.types.ts                # DTOs from api-spec (Order, OrderSummary, OrderStatus)
-├─ orders.schemas.ts              # Zod schemas for forms (checkout)
-├─ orders.routes.tsx              # route objects with lazy pages (customer + admin)
-├─ hooks/
+├─ components/                    # Feature UI components
+│  ├─ OrderCard.tsx
+│  ├─ OrderStatusBadge.tsx
+│  ├─ OrderTimeline.tsx           # renders statusHistory
+│  └─ CheckoutForm.tsx
+├─ hooks/                         # React Query hooks
 │  ├─ useOrders.ts                # list (query)
 │  ├─ useOrder.ts                 # detail + polling (query)
 │  ├─ useCheckout.ts              # mutation
 │  ├─ useCancelOrder.ts           # mutation
 │  └─ useUpdateOrderStatus.ts     # admin mutation
-├─ components/
-│  ├─ OrderCard.tsx
-│  ├─ OrderStatusBadge.tsx
-│  ├─ OrderTimeline.tsx           # renders statusHistory
-│  └─ CheckoutForm.tsx
-├─ pages/
+├─ types/                         # DTOs & TypeScript types
+│  └─ orders.types.ts             # Order, OrderSummary, OrderStatus from api-spec
+├─ pages/                         # Feature screens / pages
 │  ├─ CheckoutPage.tsx
 │  ├─ OrdersPage.tsx
 │  ├─ OrderDetailPage.tsx
 │  └─ admin/
 │     ├─ AdminOrdersPage.tsx
 │     └─ AdminOrderDetailPage.tsx
+├─ services/                      # API / HTTP services & query keys
+│  ├─ orders.service.ts           # typed HTTP calls only (no React)
+│  └─ orders.keys.ts              # query key factory
+├─ schemas/                       # Validation schemas (optional)
+│  └─ orders.schemas.ts           # Zod schemas for forms (checkout)
+├─ routes.ts                      # route objects with lazy pages (customer + admin)
+├─ context.md                     # Feature scope, endpoints, business rules, states
 ├─ __tests__/
 └─ index.ts                       # PUBLIC API of the feature
 ```
 
-- Skip files a small feature does not need (`schemas`, `keys`, admin pages).
+- Skip folders or files a small feature does not need (`schemas/`, admin pages).
 - Do **not** create top-level `src/components`, `src/hooks`, `src/pages`, `src/services`, `src/store` folders.
 - Admin screens live **inside the feature they manage** (`pages/admin/`), never in a separate `admin/` feature.
 
@@ -114,19 +110,19 @@ features/orders/
 
 | Piece | Does | Must NOT |
 |---|---|---|
-| `*.api.ts` | Call endpoints via `http-client`, return typed DTOs (unwrap `data`) | Import React, touch cache, show toasts |
-| `hooks/` | Wrap api calls in `useQuery`/`useMutation`, handle invalidation | Render UI |
+| `services/` | Call endpoints via `http-client`, return typed DTOs (unwrap `data`) | Import React, touch cache, show toasts |
+| `hooks/` | Wrap service calls in `useQuery`/`useMutation`, handle invalidation | Render UI |
 | `components/` | Presentational + feature-specific UI, receive data via props/hooks | Call `fetch` directly |
 | `pages/` | Compose components, read route params, handle page states | Contain business rules or raw HTTP |
-| `*.schemas.ts` | Form validation | Import components |
-| `*.types.ts` | Types matching `api-spec.md` | Contain logic |
+| `schemas/` | Form validation (Zod) | Import components |
+| `types/` | Types matching `api-spec.md` | Contain logic |
 
-- Direction: `pages -> components -> hooks -> api`. Never reverse.
-- Pages and components never call `*.api.ts` directly; they use hooks.
+- Direction: `pages -> components -> hooks -> services`. Never reverse.
+- Pages and components never call `services/` directly; they use hooks.
 
 ```ts
-// orders.api.ts
-export const ordersApi = {
+// services/orders.service.ts
+export const ordersService = {
   checkout: (body: CheckoutInput) => http.post<Order>('/orders', body),
   getByCode: (orderCode: string) => http.get<Order>(`/orders/${orderCode}`),
 };
@@ -137,7 +133,7 @@ export const ordersApi = {
 export function useCheckout() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ordersApi.checkout,
+    mutationFn: ordersService.checkout,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: orderKeys.lists() });
       qc.setQueryData(cartKeys.detail(), { items: [], subtotal: 0 }); // server cleared the cart
@@ -151,15 +147,15 @@ export function useCheckout() {
 ## 5. Public API & Import Boundaries
 
 - `index.ts` exports only what other features/app need: route modules, hooks, shared-by-feature components, DTO types.
-- Never export `*.api.ts`, `*.keys.ts` internals, or pages from `index.ts` (pages are reached through the routes module).
-- Path aliases: `@/features/*`, `@/shared/*`, `@/app/*`, `@/config/*`.
+- Never export `services/`, query keys internals, or pages from `index.ts` (pages are reached through the routes module).
+- Path aliases: `@/features/*`, `@/shared/*`, `@/core/*`, `@/layouts/*`.
 
 ```ts
 // features/cart/index.ts
-export { cartRoutes } from './cart.routes';
+export { cartRoutes } from './routes';
 export { useCart, useAddToCart } from './hooks';
 export { CartBadge } from './components/CartBadge';
-export type { Cart, CartItem } from './cart.types';
+export type { Cart, CartItem } from './types/cart.types';
 ```
 
 ```ts
@@ -167,7 +163,7 @@ export type { Cart, CartItem } from './cart.types';
 import { useAddToCart } from '@/features/cart';
 
 // BAD: deep import into another feature
-import { cartApi } from '@/features/cart/cart.api';
+import { cartService } from '@/features/cart/services/cart.service';
 ```
 
 Enforce with ESLint:
@@ -404,7 +400,7 @@ export type AddressForm = z.infer<typeof addressSchema>;
 | Feature folders | `kebab-case` | `admin-reports` |
 | Components, pages | `PascalCase.tsx`, one per file | `OrderCard.tsx` |
 | Hooks | `useXxx.ts` | `useCheckout.ts` |
-| Non-component files | `<feature>.<role>.ts` | `orders.api.ts`, `orders.keys.ts` |
+| Non-component files | `<feature>.<role>.ts` | `orders.service.ts`, `orders.keys.ts` |
 | Types/interfaces | `PascalCase` | `OrderSummary` |
 | Variables/functions | `camelCase` | `formatMoney` |
 | Constants | `UPPER_SNAKE_CASE` | `MAX_QUANTITY` |
@@ -441,11 +437,11 @@ export type AddressForm = z.infer<typeof addressSchema>;
 
 ## 17. Adding a New Feature (Checklist)
 
-1. Create `features/<name>/` with only the files needed (see §3).
-2. Define DTO types from `../../docs/api-spec.md`, then `*.api.ts`, `*.keys.ts`, hooks.
+1. Create `features/<name>/` with only the folders/files needed (see §3: `components/`, `hooks/`, `types/`, `pages/`, `services/`, `routes.ts`, `context.md`, `index.ts`).
+2. Define DTO types in `types/` from `../../docs/api-spec.md`, then `services/`, query keys, hooks.
 3. Build components and pages; handle loading/error/empty states.
-4. Add `<name>.routes.tsx` (customer + admin arrays) and export it in `index.ts`.
-5. Compose it in `app/router.tsx`; add paths to `shared/constants/routes.ts`.
+4. Add `routes.ts` (customer + admin arrays) and export it in `index.ts`.
+5. Compose it in `router.ts`; add paths to `shared/constants/routes.ts`.
 6. Update the dependency map (§5) and the route table (§6); ensure no cycles.
 7. Add error-code messages for the feature's `422` codes.
 8. Add tests; run lint (import boundaries), type-check, and build.
@@ -457,7 +453,7 @@ export type AddressForm = z.infer<typeof addressSchema>;
 **Do**
 - Put new code in the owning feature folder and follow the anatomy in §3.
 - Import other features only via `@/features/<name>` (`index.ts`).
-- Use TanStack Query for all server data, key factories for query keys, and hooks as the only bridge to `*.api.ts`.
+- Use TanStack Query for all server data, key factories for query keys, and hooks as the only bridge to `services/`.
 - Use React Hook Form + Zod for forms; map `VALIDATION_ERROR.details` to fields.
 - Display prices/totals exactly as the API returns them; format with `formatMoney`.
 - Use `orderCode` in URLs; keep filters/pagination in URL search params.

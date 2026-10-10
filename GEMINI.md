@@ -53,9 +53,9 @@ Before finishing any task: `lint`, `typecheck`, and `test` must pass.
 
 ## Architecture essentials
 
-- **Feature-based:** `src/features/<name>/` is a vertical slice (`*.api.ts`, `*.keys.ts`, `*.types.ts`, `*.schemas.ts`, `hooks/`, `components/`, `pages/`, `*.routes.tsx`, `index.ts`). Features: `auth`, `profile`, `catalog`, `cart`, `promotions`, `orders`, `payments`, `admin-reports`.
+- **Feature-based:** `src/features/<name>/` is a vertical slice (`components/`, `hooks/`, `types/`, `pages/`, `services/`, `routes.ts`, `context.md`, `index.ts`). Features: `auth`, `profile`, `catalog`, `cart`, `promotions`, `orders`, `payments`, `admin-reports`.
 - **Admin screens** live inside the feature they manage (`pages/admin/`) and are reached **only via lazy routes**. Never export admin pages from `index.ts` (it would leak admin code into the customer bundle).
-- **Layers:** `pages -> components -> hooks -> *.api.ts`. Pages/components never call `*.api.ts` or `fetch`; hooks are the only bridge.
+- **Layers:** `pages -> components -> hooks -> services`. Pages/components never call `services` or `fetch`; hooks are the only bridge.
 - **Import boundaries:** use other features **only** via `@/features/<name>` (`index.ts`); `shared/` imports nothing from `features/` or `app/`; no cycles. Allowed dependencies are in `docs/fe-project-rules.md` §5 (e.g. `orders` may use `cart`, `profile`, `promotions`, `payments`, `auth`; `cart` must not import `catalog`).
 - **`app/`** is the composition root (providers, router, guards, layouts). **`shared/`** holds business-free code (api client, ui components, lib, constants, types).
 
