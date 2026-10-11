@@ -69,7 +69,7 @@ Before finishing any task: `lint`, `typecheck`, and `test` must pass.
 - **API client:** all requests via `shared/api/http-client.ts` (configured Axios instance with interceptors for Bearer header, single-flight refresh on `401`, envelope unwrap, and `ApiError`). Never auto-retry `POST /orders` or `POST /cart/items`.
 - **Tokens:** access token in memory, refresh token in `localStorage`, both only through `shared/api/token-storage.ts`. Never log or put tokens in URLs. Logout clears tokens and the whole query cache.
 - **Errors:** map by error `code` (central map + feature overrides), never raw server text for unknown codes. Map `VALIDATION_ERROR.details` to form fields. Every page handles loading / error / empty / success.
-- **Roles:** hierarchical (`admin > customer`); admin passes every guard. UI hiding is UX only; the backend enforces permissions.
+- **Roles and RBAC:** roles (`customer`, `staff`, `admin`) mirror backend RBAC permissions (`RequireRole` guards staff operational pages and admin-only pages). UI hiding is UX only; the backend enforces permissions.
 - **Order tracking:** poll `GET /orders/:orderCode` (~10 s) while the order is not `completed`/`cancelled` and the tab is visible. Payment results arrive through the order (backend webhook), not directly.
 - **Money/dates:** use `formatMoney` / `formatDate`; API money is a `number`, dates are UTC ISO strings. Order status labels/colors come from `shared/constants/order-status.ts`.
 - **URLs:** `orderCode` for orders, `slug` for products; never numeric order IDs. Redirect targets (`?redirect=`, `payment.checkoutUrl`) must be validated (internal path / `https:`).

@@ -219,14 +219,14 @@ export const ordersAdminRoutes: RouteObject[] = [
 | `/checkout` | Auth | `orders` |
 | `/orders`, `/orders/:orderCode` | Auth | `orders` |
 | `/profile`, `/profile/addresses` | Auth | `profile` |
-| `/admin/orders`, `/admin/orders/:orderCode` | Admin | `orders` |
+| `/admin/orders`, `/admin/orders/:orderCode` | Staff | `orders` |
 | `/admin/products`, `/admin/categories`, `/admin/option-groups` | Admin | `catalog` |
 | `/admin/vouchers` | Admin | `promotions` |
 | `/admin/users` | Admin | `auth` |
 | `/admin/reports` | Admin | `admin-reports` |
 
-- Guards: `<RequireAuth>` redirects to `/login?redirect=<path>`; `<RequireRole role="admin">` shows a 403 page.
-- Roles are hierarchical (`admin > customer`): an admin passes every guard and may open customer pages too.
+- Guards: `<RequireAuth>` redirects to `/login?redirect=<path>`; `<RequireRole role={['staff', 'admin']}>` guards staff operational screens, while `<RequireRole role="admin">` guards admin-only pages (shows a 403 page on unauthorized access).
+- Roles and RBAC: roles (`customer`, `staff`, `admin`) mirror the backend RBAC model. Staff can access order boards and availability toggles; admin passes all guards.
 - Path constants live in `shared/constants/routes.ts`; no hardcoded path strings in components.
 - Admin routes are a separate lazy chunk under `AdminLayout`; customers never download admin code.
 - Payment gateway returns directly to `/orders/:orderCode` (no separate `/payments` route needed).

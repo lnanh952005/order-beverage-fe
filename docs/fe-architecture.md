@@ -300,7 +300,7 @@ sequenceDiagram
 
 - Each feature exports route objects (`<feature>.routes.tsx`, customer + admin arrays) using route-level `lazy`; `app/router.tsx` composes them under layouts.
 - Layouts: `CustomerLayout` (menu, cart badge), `AuthLayout` (login/register), `AdminLayout` (admin nav).
-- Guards: `RequireAuth` -> `/login?redirect=<path>`; `RequireRole('admin')` -> 403 page. Roles are hierarchical (`admin > customer`), so admins pass every guard.
+- Guards: `RequireAuth` -> `/login?redirect=<path>`; `RequireRole(['staff', 'admin'])` for staff operational boards, `RequireRole('admin')` -> 403 page. Mirrors backend RBAC permissions.
 - Chunking model:
 
 | Chunk | Loaded by | Contains |
@@ -344,7 +344,7 @@ flowchart LR
 | Concern | Approach |
 |---|---|
 | Authentication | In-memory access token, `localStorage` refresh token via `token-storage.ts`, single-flight refresh |
-| Authorization (UI) | `RequireAuth` / `RequireRole`, hierarchical roles; UX only, backend enforces |
+| Authorization (UI) | `RequireAuth` / `RequireRole` (customer, staff, admin); UX only, backend enforces |
 | Error handling | `ApiError` -> code-based messages -> form errors / route error elements / global `ErrorBoundary` |
 | Loading/empty/error | Every page renders four states via `shared/components/feedback` |
 | Configuration | `config/env.ts` (Zod-validated `VITE_API_BASE_URL`, `VITE_GOOGLE_CLIENT_ID`, `VITE_CURRENCY`, `VITE_LOCALE`) |
@@ -440,14 +440,14 @@ Start simple; evolve when real needs appear.
 | 9 | No client-authoritative money logic (preview only) | Prevents price tampering and drift | Preview may differ slightly from the server |
 | 10 | Route-level lazy loading, admin as separate chunk | Fast customer entry | Extra loading states on navigation |
 | 11 | Static build deployed to CDN, env baked at build time | Simple, cheap, cacheable | One build per environment |
-| 12 | Hierarchical roles mirrored from the backend | Admin passes all guards, same model on both sides | Coarse-grained; extend if roles grow |
+| 12 | RBAC role model mirrored from the backend | Staff and Admin access operational features; admin passes all guards | Fine-tuned route guarding; extend as roles grow |
 
 ---
 
 ## 14. Key Decisions & Agreements
 
 - **Payment return URL:** Gateway returns users directly to `/orders/:orderCode` (no separate payment-result route; order detail polling displays payment status).
-- **Customer Cancellation:** Customers may only cancel during `pending` and `confirmed`. Once `preparing` begins, only admin can cancel.
+- **Customer Cancellation:** Customers may only cancel during `pending` and `confirmed`. Once `preparing` begins, only staff and admin can cancel.
 - **Refresh token storage:** `localStorage` for now with single-flight refresh; planned move to `httpOnly` cookie later.
 - **Hosting topology:** Separate frontend origin on CDN with backend CORS allow-list.
 - **Realtime tracking:** Polling (~10 s) for active orders at launch; path to SSE defined.
