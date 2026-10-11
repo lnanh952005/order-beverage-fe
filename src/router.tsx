@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router';
 import { FullLayout, AdminLayout } from '@/layouts';
 
-// Import feature routes via their public index.ts
-import { authRoutes, authAdminRoutes } from '@/features/auth';
+// Import feature routes and guards via their public index.ts
+import { authRoutes, authAdminRoutes, RequireRole } from '@/features/auth';
 import { catalogRoutes, catalogAdminRoutes } from '@/features/catalog';
 import { cartRoutes } from '@/features/cart';
 import { ordersRoutes, ordersAdminRoutes } from '@/features/orders';
@@ -27,7 +27,11 @@ export const router = createBrowserRouter([
   // Admin Portal Layout
   {
     path: '/admin',
-    element: <AdminLayout />,
+    element: (
+      <RequireRole role={['staff', 'admin']}>
+        <AdminLayout />
+      </RequireRole>
+    ),
     children: [
       ...ordersAdminRoutes,
       ...catalogAdminRoutes,

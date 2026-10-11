@@ -1,4 +1,6 @@
+import * as React from 'react';
 import type { RouteObject } from 'react-router';
+import { RequireRole } from './components/RequireRole';
 
 export const authRoutes: RouteObject[] = [
   {
@@ -18,8 +20,14 @@ export const authRoutes: RouteObject[] = [
 export const authAdminRoutes: RouteObject[] = [
   {
     path: 'users',
-    lazy: async () => ({
-      Component: (await import('./pages/admin/AdminUsersPage')).AdminUsersPage,
-    }),
+    element: React.createElement(RequireRole, { role: 'admin' }),
+    children: [
+      {
+        index: true,
+        lazy: async () => ({
+          Component: (await import('./pages/admin/AdminUsersPage')).AdminUsersPage,
+        }),
+      },
+    ],
   },
 ];

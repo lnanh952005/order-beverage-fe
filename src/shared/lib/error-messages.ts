@@ -14,6 +14,11 @@ const ERROR_MESSAGES: Record<string, string> = {
   EMAIL_ALREADY_EXISTS: 'Email này đã được sử dụng.',
   INVALID_REFRESH_TOKEN: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.',
   USE_GOOGLE_SIGN_IN: 'Tài khoản này được đăng ký bằng Google. Vui lòng đăng nhập với Google.',
+  ACCOUNT_DISABLED: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.',
+  INVALID_GOOGLE_TOKEN: 'Xác thực Google không thành công. Vui lòng thử lại.',
+  USER_NOT_FOUND: 'Không tìm thấy người dùng trong hệ thống.',
+  ROLE_NOT_FOUND: 'Vai trò người dùng không hợp lệ.',
+  LAST_SIGN_IN_METHOD: 'Không thể hủy phương thức đăng nhập duy nhất của tài khoản.',
 
   // Cart & Catalog
   CART_EMPTY: 'Giỏ hàng của bạn đang trống.',

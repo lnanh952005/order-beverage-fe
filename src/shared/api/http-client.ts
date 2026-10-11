@@ -1,4 +1,9 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+} from 'axios';
 import { env } from '@/core/config/env';
 import { tokenStorage } from './token-storage';
 import type { ApiErrorDetail } from '@/shared/types/common.types';
@@ -22,13 +27,22 @@ export class ApiError extends Error {
   }
 }
 
-export const httpClient = axios.create({
+export interface CustomAxiosInstance extends Omit<AxiosInstance, 'get' | 'post' | 'put' | 'patch' | 'delete'> {
+  get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  (config: AxiosRequestConfig): Promise<unknown>;
+}
+
+export const httpClient: CustomAxiosInstance = axios.create({
   baseURL: env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
   timeout: 15000,
-});
+}) as unknown as CustomAxiosInstance;
 
 // Single-flight refresh token promise
 let refreshPromise: Promise<string | null> | null = null;
@@ -70,6 +84,9 @@ httpClient.interceptors.response.use(
   (response) => {
     // Unwraps { success: true, data: T, meta?: ... }
     if (response.data && typeof response.data === 'object' && 'data' in response.data) {
+      if ('meta' in response.data) {
+        return response.data;
+      }
       return response.data.data;
     }
     return response.data;
