@@ -23,6 +23,12 @@ const ERROR_MESSAGES: Record<string, string> = {
   // Cart & Catalog
   CART_EMPTY: 'Giỏ hàng của bạn đang trống.',
   PRODUCT_UNAVAILABLE: 'Một số sản phẩm không còn khả dụng. Vui lòng kiểm tra lại giỏ hàng.',
+  PRODUCT_NOT_FOUND: 'Sản phẩm không tồn tại hoặc đã ngừng kinh doanh.',
+  CATEGORY_NOT_FOUND: 'Danh mục không tồn tại.',
+  CATEGORY_HAS_PRODUCTS: 'Không thể xóa danh mục đang có sản phẩm hoạt động.',
+  SLUG_ALREADY_EXISTS: 'Đường dẫn (slug) đã tồn tại. Vui lòng chọn đường dẫn khác.',
+  INVALID_SIZE: 'Kích thước món không hợp lệ.',
+  INVALID_OPTION_SELECTION: 'Lựa chọn tùy biến không hợp lệ.',
   INSUFFICIENT_STOCK: 'Số lượng sản phẩm trong kho không đủ.',
 
   // Promotions

@@ -36,7 +36,9 @@ export function AuthCallbackPage() {
         if (isNewUser) {
           toast.success('Chào mừng bạn gia nhập Beverage Hub!');
         } else {
-          toast.success('Đăng nhập Google thành công!');
+          toast.success('Đăng nhập Google thành công!', {
+            duration: 1500
+          });
         }
         navigate(ROUTE_PATHS.HOME, { replace: true });
       })
