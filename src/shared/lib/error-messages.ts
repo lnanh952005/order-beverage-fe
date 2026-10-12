@@ -22,7 +22,9 @@ const ERROR_MESSAGES: Record<string, string> = {
 
   // Cart & Catalog
   CART_EMPTY: 'Giỏ hàng của bạn đang trống.',
+  CART_ITEM_NOT_FOUND: 'Không tìm thấy món này trong giỏ hàng.',
   PRODUCT_UNAVAILABLE: 'Một số sản phẩm không còn khả dụng. Vui lòng kiểm tra lại giỏ hàng.',
+  OPTION_UNAVAILABLE: 'Tùy chọn đã hết hàng. Vui lòng chọn tùy chọn khác.',
   PRODUCT_NOT_FOUND: 'Sản phẩm không tồn tại hoặc đã ngừng kinh doanh.',
   CATEGORY_NOT_FOUND: 'Danh mục không tồn tại.',
   CATEGORY_HAS_PRODUCTS: 'Không thể xóa danh mục đang có sản phẩm hoạt động.',

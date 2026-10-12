@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
   Coffee,
-  ShoppingCart,
   User as UserIcon,
   LogOut,
   ShieldCheck,
@@ -13,6 +12,7 @@ import { ROUTE_PATHS } from '@/shared/constants/routes';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { useAuth } from '@/features/auth';
+import { CartBadge } from '@/features/cart';
 
 function getUserInitials(name: string): string {
   if (!name) return 'U';
@@ -82,16 +82,7 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
-          <Link to={ROUTE_PATHS.CART}>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              aria-label="Giỏ hàng"
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
-          </Link>
+          <CartBadge />
 
           {isAuthenticated && user ? (
             <div className="relative" ref={menuRef}>

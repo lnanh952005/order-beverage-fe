@@ -1,14 +1,20 @@
-import { useParams, Link } from 'react-router';
+import { useParams, Link, useNavigate } from 'react-router';
 import { ChevronLeft, CupSoda } from 'lucide-react';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
 import { formatMoney } from '@/shared/lib/formatters';
 import { Badge } from '@/shared/components/ui/badge';
 import { Skeleton, ErrorState } from '@/shared/components/feedback';
+import { useAuth } from '@/features/auth';
+import { useAddToCart } from '@/features/cart';
 import { useProduct } from '../hooks/useProduct';
 import { ProductCustomizer } from '../components/ProductCustomizer';
+import type { Option, Product, ProductSize } from '../types/catalog.types';
 
 export function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const addToCartMutation = useAddToCart();
   const { data: product, isLoading, isError, refetch } = useProduct(slug || '');
 
   if (isLoading) {
@@ -48,6 +54,29 @@ export function ProductDetailPage() {
       </div>
     );
   }
+
+  const handleAddToCart = (payload: {
+    product: Product;
+    size?: ProductSize;
+    options: Option[];
+    quantity: number;
+  }) => {
+    if (!isAuthenticated) {
+      navigate(
+        `${ROUTE_PATHS.LOGIN}?redirect=${encodeURIComponent(
+          ROUTE_PATHS.PRODUCT_DETAIL(slug || ''),
+        )}`,
+      );
+      return;
+    }
+
+    addToCartMutation.mutate({
+      productId: payload.product.id,
+      sizeId: payload.size?.id,
+      optionIds: payload.options.map((o) => o.id),
+      quantity: payload.quantity,
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -125,7 +154,10 @@ export function ProductDetailPage() {
 
           {/* Interactive Customizer */}
           <div className="rounded-2xl border border-border/60 bg-card p-5 sm:p-6 shadow-xs">
-            <ProductCustomizer product={product} />
+            <ProductCustomizer
+              product={product}
+              onAddToCart={handleAddToCart}
+            />
           </div>
         </div>
       </div>

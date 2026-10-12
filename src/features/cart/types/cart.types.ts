@@ -1,38 +1,51 @@
+export interface CartItemProduct {
+  id: number;
+  slug: string;
+  name: string;
+  imageUrl: string | null;
+}
+
+export interface CartItemSize {
+  id: number;
+  name: string;
+  priceDelta: number;
+}
+
 export interface CartItemOption {
-  optionId: number;
-  optionName: string;
+  id: number;
+  groupName: string;
+  name: string;
   priceDelta: number;
 }
 
 export interface CartItem {
   id: number;
-  productId: number;
-  productName: string;
-  productSlug: string;
-  imageUrl?: string;
-  sizeId: number;
-  sizeName: string;
+  product: CartItemProduct;
+  size: CartItemSize | null;
+  options: CartItemOption[];
   quantity: number;
+  note: string | null;
   unitPrice: number;
   lineTotal: number;
   isAvailable: boolean;
-  options: CartItemOption[];
 }
 
 export interface Cart {
   items: CartItem[];
   subtotal: number;
-  itemCount: number;
 }
 
 export interface AddToCartInput {
   productId: number;
-  sizeId: number;
-  quantity: number;
+  sizeId?: number | null;
   optionIds?: number[];
-  note?: string;
+  quantity: number;
+  note?: string | null;
 }
 
 export interface UpdateCartItemInput {
-  quantity: number;
+  quantity?: number;
+  sizeId?: number | null;
+  optionIds?: number[];
+  note?: string | null;
 }
