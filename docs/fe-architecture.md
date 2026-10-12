@@ -158,11 +158,11 @@ flowchart LR
 | State | Home | Why |
 |---|---|---|
 | Server data (menu, cart, orders, profile) | TanStack Query cache | One cache, automatic refetch/invalidation |
-| Session user | `AuthProvider` + `['auth','me']` query | Derived from server |
+| Session user | Zustand store (`useAuthStore`) + `['auth','me']` query | Fast, no provider overhead, derived from server |
 | Form state | React Hook Form | Local to the form |
 | Filters / pagination / sort | URL search params | Shareable, back-button friendly |
 | Local UI (modal, tabs) | `useState` | Short-lived |
-| Cross-page UI (cart drawer) | Small context/Zustand, never server data | Rare |
+| Cross-page UI (cart drawer) | Small Zustand store, never server data | Rare |
 
 - The **cart is server state** (one cart per user on the backend); no local cart copy.
 - Freshness policy (`staleTime`): categories/products 5 min, product detail 1 min, reports 1 min, cart/orders/admin lists 0.

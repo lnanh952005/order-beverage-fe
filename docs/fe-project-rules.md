@@ -26,6 +26,7 @@
 | Build | Vite | Given |
 | Routing | React Router 7 (data router, route-level `lazy`) | Assumption |
 | Server state | TanStack Query | Assumption |
+| Client/Global state | Zustand (`features/<feature>/stores/`) | Decided |
 | Forms + validation | React Hook Form + Zod | Assumption |
 | HTTP | Axios instance with interceptors in `shared/api/http-client.ts` | Decided |
 | Styling | Tailwind CSS v4 + shadcn/ui (Radix UI primitives) | Decided |
@@ -369,13 +370,13 @@ export type AddressForm = z.infer<typeof addressSchema>;
 | State type | Where |
 |---|---|
 | Server data (menu, cart, orders, profile) | TanStack Query |
-| Session user | `AuthProvider` + `['auth','me']` query |
+| Session user | Zustand store (`useAuthStore`) in `features/auth/stores/` + `['auth','me']` sync |
 | Form state | React Hook Form |
 | Filters/pagination/sort | **URL search params** (shareable, back-button friendly) |
 | Local UI (modal open, tabs) | `useState` in the component |
-| Cross-page UI only (e.g. cart drawer) | Small context or Zustand store, **never server data** |
+| Cross-page UI only (e.g. cart drawer) | Small Zustand store (`features/<feature>/stores/`), **never server data** |
 
-- No Redux. Introduce a global store only for UI state that truly spans pages.
+- No Redux. State is managed via TanStack Query (server state) and Zustand (client session & UI stores).
 
 ---
 
