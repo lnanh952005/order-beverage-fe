@@ -5,6 +5,7 @@ export const ROUTE_PATHS = {
   PRODUCT_DETAIL: (slug: string) => `/menu/${slug}`,
   LOGIN: '/login',
   REGISTER: '/register',
+  AUTH_CALLBACK: '/auth/callback',
   CART: '/cart',
   CHECKOUT: '/checkout',
   ORDERS: '/orders',

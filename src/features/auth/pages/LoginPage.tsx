@@ -1,10 +1,19 @@
-import { Link } from 'react-router';
+import * as React from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { Coffee, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
 import { LoginForm } from '../components/LoginForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
 
 export function LoginPage() {
+  const [searchParams] = useSearchParams();
+
+  React.useEffect(() => {
+    if (searchParams.get('error') === 'google_failed') {
+      toast.error('Đăng nhập Google thất bại hoặc đã bị hủy.');
+    }
+  }, [searchParams]);
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-muted/20">
       <div className="w-full max-w-md space-y-6">

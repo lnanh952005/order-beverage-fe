@@ -15,6 +15,12 @@ export const authRoutes: RouteObject[] = [
       Component: (await import('./pages/RegisterPage')).RegisterPage,
     }),
   },
+  {
+    path: 'auth/callback',
+    lazy: async () => ({
+      Component: (await import('./pages/AuthCallbackPage')).AuthCallbackPage,
+    }),
+  },
 ];
 
 export const authAdminRoutes: RouteObject[] = [

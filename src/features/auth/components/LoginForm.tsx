@@ -16,14 +16,13 @@ import { getErrorMessage } from '@/shared/lib/error-messages';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
 
 export function LoginForm() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || ROUTE_PATHS.HOME;
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [serverError, setServerError] = React.useState<string | null>(null);
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
 
   const {
     register,
@@ -69,28 +68,6 @@ export function LoginForm() {
     }
   };
 
-  const handleGoogleSuccess = async (idToken: string) => {
-    setServerError(null);
-    setIsGoogleLoading(true);
-    try {
-      const result = await loginWithGoogle(idToken);
-      if (result.isNewUser) {
-        toast.success('Chào mừng bạn gia nhập Beverage Hub!');
-      } else {
-        toast.success('Đăng nhập Google thành công!');
-      }
-      navigate(redirectPath, { replace: true });
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setServerError(getErrorMessage(err.code, err.message));
-      } else {
-        setServerError('Đăng nhập bằng Google không thành công. Vui lòng thử lại.');
-      }
-    } finally {
-      setIsGoogleLoading(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
       {serverError && (
@@ -115,7 +92,7 @@ export function LoginForm() {
               autoComplete="email"
               placeholder="ban@example.com"
               className="pl-9"
-              disabled={isSubmitting || isGoogleLoading}
+              disabled={isSubmitting}
               error={Boolean(errors.email)}
               {...register('email')}
             />
@@ -138,7 +115,7 @@ export function LoginForm() {
               autoComplete="current-password"
               placeholder="••••••••"
               className="pl-9 pr-10"
-              disabled={isSubmitting || isGoogleLoading}
+              disabled={isSubmitting}
               error={Boolean(errors.password)}
               {...register('password')}
             />
@@ -146,7 +123,7 @@ export function LoginForm() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiển thị mật khẩu'}
-              disabled={isSubmitting || isGoogleLoading}
+              disabled={isSubmitting}
               className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors focus:outline-none disabled:opacity-50"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -161,7 +138,7 @@ export function LoginForm() {
         <Button
           type="submit"
           className="w-full font-semibold"
-          disabled={isSubmitting || isGoogleLoading}
+          disabled={isSubmitting}
         >
           {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
         </Button>
@@ -181,9 +158,7 @@ export function LoginForm() {
 
       {/* Google Login */}
       <GoogleLoginButton
-        onSuccess={handleGoogleSuccess}
-        disabled={isSubmitting || isGoogleLoading}
-        isLoading={isGoogleLoading}
+        disabled={isSubmitting}
         text="signin_with"
       />
 
