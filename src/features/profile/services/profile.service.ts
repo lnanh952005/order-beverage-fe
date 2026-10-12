@@ -1,7 +1,38 @@
 import { httpClient } from '@/shared/api/http-client';
-import type { UserProfile, Address } from '../types/profile.types';
+import type { User } from '@/features/auth';
+import type {
+  Address,
+  CreateAddressInput,
+  UpdateAddressInput,
+  UpdateProfileInput,
+} from '../types/profile.types';
 
 export const profileService = {
-  getProfile: () => httpClient.get<UserProfile>('/profile'),
-  getAddresses: () => httpClient.get<Address[]>('/profile/addresses'),
+  getProfile: (): Promise<User> => {
+    return httpClient.get<User>('/profile');
+  },
+
+  updateProfile: (data: UpdateProfileInput): Promise<User> => {
+    return httpClient.patch<User>('/profile', data);
+  },
+
+  getAddresses: (): Promise<Address[]> => {
+    return httpClient.get<Address[]>('/profile/addresses');
+  },
+
+  createAddress: (data: CreateAddressInput): Promise<Address> => {
+    return httpClient.post<Address>('/profile/addresses', data);
+  },
+
+  updateAddress: (id: number, data: UpdateAddressInput): Promise<Address> => {
+    return httpClient.patch<Address>(`/profile/addresses/${id}`, data);
+  },
+
+  deleteAddress: (id: number): Promise<void> => {
+    return httpClient.delete<void>(`/profile/addresses/${id}`);
+  },
+
+  unlinkGoogleIdentity: (): Promise<void> => {
+    return httpClient.delete<void>('/auth/identities/google');
+  },
 };
