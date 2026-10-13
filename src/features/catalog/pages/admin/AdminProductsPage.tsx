@@ -197,7 +197,9 @@ export function AdminProductsPage() {
                     {/* Category */}
                     <td className="px-4 py-3">
                       <span className="text-xs font-medium bg-muted px-2.5 py-1 rounded-md text-foreground">
-                        {product.category?.name || 'Chưa phân loại'}
+                        {product.category?.name ||
+                          categories.find((c) => c.id === product.categoryId)?.name ||
+                          'Chưa phân loại'}
                       </span>
                     </td>
 
@@ -209,16 +211,23 @@ export function AdminProductsPage() {
                     {/* Sizes */}
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
-                        {product.sizes?.map((s) => (
-                          <Badge
-                            key={s.id}
-                            variant={s.isDefault ? 'default' : 'outline'}
-                            className="text-[11px] font-normal"
-                          >
-                            {s.name || s.sizeCode}
-                            {s.priceDelta > 0 && ` (+${formatMoney(s.priceDelta)})`}
-                          </Badge>
-                        ))}
+                        {product.sizes && product.sizes.length > 0 ? (
+                          [...product.sizes]
+                            .sort((a, b) => a.priceDelta - b.priceDelta)
+                            .map((s) => (
+                              <Badge
+                                key={s.id}
+                                variant={s.isDefault ? 'default' : 'outline'}
+                                className="text-[11px] font-normal"
+                              >
+                                {s.name || s.sizeCode}
+                                {s.priceDelta !== 0 &&
+                                  ` (${s.priceDelta > 0 ? '+' : ''}${formatMoney(s.priceDelta)})`}
+                              </Badge>
+                            ))
+                        ) : (
+                          <span className="text-xs text-muted-foreground italic">Mặc định</span>
+                        )}
                       </div>
                     </td>
 

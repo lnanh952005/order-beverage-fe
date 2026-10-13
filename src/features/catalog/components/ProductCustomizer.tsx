@@ -185,7 +185,11 @@ export function ProductCustomizer({ product, onAddToCart }: ProductCustomizerPro
                     {sizeLabel}
                   </span>
                   <span className="mt-0.5 text-xs text-muted-foreground">
-                    {size.priceDelta > 0 ? `+${formatMoney(size.priceDelta)}` : 'Tiêu chuẩn'}
+                    {size.priceDelta > 0
+                      ? `+${formatMoney(size.priceDelta)}`
+                      : size.priceDelta < 0
+                      ? formatMoney(size.priceDelta)
+                      : 'Tiêu chuẩn'}
                   </span>
                 </button>
               );
