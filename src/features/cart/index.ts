@@ -7,6 +7,7 @@ export {
   useRemoveCartItem,
   useClearCart,
 } from './hooks';
+export { cartKeys } from './services/cart.keys';
 export type {
   Cart,
   CartItem,

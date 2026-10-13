@@ -1,17 +1,43 @@
 import { httpClient } from '@/shared/api/http-client';
-import type { Order, CheckoutInput } from '../types/orders.types';
-import type { OrderStatus } from '@/shared/constants/order-status';
+import type {
+  AdminOrderFilters,
+  AdminOrderSummary,
+  CancelOrderPayload,
+  CreateOrderPayload,
+  OrderDetail,
+  OrderFilters,
+  OrderStatus,
+  OrderSummary,
+  PaginatedResult,
+  UpdateOrderStatusPayload,
+} from '../types/orders.types';
 
 export const ordersService = {
-  checkout: (body: CheckoutInput) => httpClient.post<Order>('/orders', body),
-  getByCode: (orderCode: string) => httpClient.get<Order>(`/orders/${orderCode}`),
-  getMyOrders: () => httpClient.get<Order[]>('/orders'),
-  cancelOrder: (orderCode: string, reason?: string) =>
-    httpClient.post<Order>(`/orders/${orderCode}/cancel`, { reason }),
+  createOrder: (payload: CreateOrderPayload): Promise<OrderDetail> =>
+    httpClient.post<OrderDetail>('/orders', payload),
 
-  // Admin endpoints
-  getAdminOrders: (params?: { status?: OrderStatus; date?: string }) =>
-    httpClient.get<Order[]>('/admin/orders', { params }),
+  getOrders: (filters?: OrderFilters): Promise<PaginatedResult<OrderSummary>> =>
+    httpClient.get<PaginatedResult<OrderSummary>>('/orders', { params: filters }),
+
+  getOrderByCode: (orderCode: string): Promise<OrderDetail> =>
+    httpClient.get<OrderDetail>(`/orders/${orderCode}`),
+
+  cancelOrder: (orderCode: string, payload?: CancelOrderPayload): Promise<OrderDetail> =>
+    httpClient.post<OrderDetail>(`/orders/${orderCode}/cancel`, payload),
+
+  getAdminOrders: (filters?: AdminOrderFilters): Promise<PaginatedResult<AdminOrderSummary>> =>
+    httpClient.get<PaginatedResult<AdminOrderSummary>>('/admin/orders', { params: filters }),
+
+  updateAdminOrderStatus: (
+    orderCode: string,
+    payload: UpdateOrderStatusPayload,
+  ): Promise<OrderDetail> =>
+    httpClient.patch<OrderDetail>(`/admin/orders/${orderCode}/status`, payload),
+
+  // Backward-compatibility aliases
+  checkout: (payload: CreateOrderPayload) => ordersService.createOrder(payload),
+  getByCode: (orderCode: string) => ordersService.getOrderByCode(orderCode),
+  getMyOrders: (filters?: OrderFilters) => ordersService.getOrders(filters),
   updateOrderStatus: (orderCode: string, status: OrderStatus, note?: string) =>
-    httpClient.patch<Order>(`/admin/orders/${orderCode}/status`, { status, note }),
+    ordersService.updateAdminOrderStatus(orderCode, { status, reason: note }),
 };
