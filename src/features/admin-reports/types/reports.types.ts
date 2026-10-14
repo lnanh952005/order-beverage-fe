@@ -1,3 +1,13 @@
+export type GroupByPeriod = 'day' | 'week' | 'month';
+
+export type DatePreset = 'today' | '7days' | '30days' | 'thisMonth' | 'custom';
+
+export interface SalesReportItem {
+  period: string;
+  orders: number;
+  revenue: number;
+}
+
 export interface SalesSummary {
   totalRevenue: number;
   totalOrders: number;
@@ -9,12 +19,18 @@ export interface SalesSummary {
 export interface TopProductItem {
   productId: number;
   productName: string;
-  totalQuantitySold: number;
-  totalRevenue: number;
+  quantitySold: number;
+  revenue: number;
+  totalQuantitySold?: number;
+  totalRevenue?: number;
 }
 
 export interface ReportFilterParams {
-  startDate: string;
-  endDate: string;
+  from?: string;
+  to?: string;
+  startDate?: string;
+  endDate?: string;
+  groupBy?: GroupByPeriod;
   period?: 'daily' | 'weekly' | 'monthly';
+  limit?: number;
 }
