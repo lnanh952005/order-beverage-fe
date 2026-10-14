@@ -8,12 +8,14 @@ import {
   Users,
   BarChart3,
   Coffee,
+  CreditCard,
   ArrowLeft,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
 
 const ADMIN_NAV_ITEMS = [
   { label: 'Đơn hàng', path: ROUTE_PATHS.ADMIN_ORDERS, icon: ShoppingBag },
+  { label: 'Thanh toán', path: ROUTE_PATHS.ADMIN_PAYMENTS, icon: CreditCard },
   { label: 'Sản phẩm', path: ROUTE_PATHS.ADMIN_PRODUCTS, icon: Coffee },
   { label: 'Danh mục', path: ROUTE_PATHS.ADMIN_CATEGORIES, icon: Layers },
   { label: 'Nhóm tùy chọn', path: ROUTE_PATHS.ADMIN_OPTION_GROUPS, icon: SlidersHorizontal },

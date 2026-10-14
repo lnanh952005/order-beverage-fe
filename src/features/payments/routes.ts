@@ -1,5 +1,14 @@
 import type { RouteObject } from 'react-router';
 
-// Payments feature does not expose direct routes (gateway redirects to /orders/:orderCode)
+// Customer gateway redirection returns to /orders/:orderCode, so payments feature has no separate customer routes
 export const paymentsRoutes: RouteObject[] = [];
-export const paymentsAdminRoutes: RouteObject[] = [];
+
+export const paymentsAdminRoutes: RouteObject[] = [
+  {
+    path: 'payments',
+    lazy: async () => {
+      const { AdminPaymentsPage } = await import('./pages/admin/AdminPaymentsPage');
+      return { Component: AdminPaymentsPage };
+    },
+  },
+];

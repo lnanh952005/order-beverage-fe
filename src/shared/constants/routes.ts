@@ -17,6 +17,7 @@ export const ROUTE_PATHS = {
   ADMIN: '/admin',
   ADMIN_ORDERS: '/admin/orders',
   ADMIN_ORDER_DETAIL: (orderCode: string) => `/admin/orders/${orderCode}`,
+  ADMIN_PAYMENTS: '/admin/payments',
   ADMIN_PRODUCTS: '/admin/products',
   ADMIN_CATEGORIES: '/admin/categories',
   ADMIN_OPTION_GROUPS: '/admin/option-groups',

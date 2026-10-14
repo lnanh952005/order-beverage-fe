@@ -9,6 +9,7 @@ import { ordersRoutes, ordersAdminRoutes } from '@/features/orders';
 import { profileRoutes } from '@/features/profile';
 import { promotionsAdminRoutes } from '@/features/promotions';
 import { adminReportsRoutes } from '@/features/admin-reports';
+import { paymentsRoutes, paymentsAdminRoutes } from '@/features/payments';
 
 export const router = createBrowserRouter([
   // Customer & Public Layout
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       ...cartRoutes,
       ...ordersRoutes,
       ...profileRoutes,
+      ...paymentsRoutes,
     ],
   },
 
@@ -34,6 +36,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       ...ordersAdminRoutes,
+      ...paymentsAdminRoutes,
       ...catalogAdminRoutes,
       ...promotionsAdminRoutes,
       ...authAdminRoutes,

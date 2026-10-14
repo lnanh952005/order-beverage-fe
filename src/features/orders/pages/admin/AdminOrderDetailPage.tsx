@@ -8,6 +8,7 @@ import {
   Store,
   Clock,
   FileText,
+  RotateCcw,
 } from 'lucide-react';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
@@ -21,9 +22,12 @@ import {
 import { useOrder } from '../../hooks/useOrder';
 import { useUpdateOrderStatus } from '../../hooks/useUpdateOrderStatus';
 import { useCancelOrder } from '../../hooks/useCancelOrder';
+import { PaymentStatusBadge, RefundPaymentDialog } from '@/features/payments';
+import { useState } from 'react';
 
 export function AdminOrderDetailPage() {
   const { orderCode } = useParams<{ orderCode: string }>();
+  const [refundDialogOpen, setRefundDialogOpen] = useState(false);
 
   const { data: order, isLoading, isError, refetch, isFetching } = useOrder(orderCode);
   const updateStatusMutation = useUpdateOrderStatus(orderCode ?? '');
@@ -137,12 +141,10 @@ export function AdminOrderDetailPage() {
 
             <div>
               <span className="text-muted-foreground block mb-0.5">Trạng thái TT:</span>
-              <Badge
-                variant={latestPayment?.status === 'paid' ? 'success' : 'secondary'}
+              <PaymentStatusBadge
+                status={latestPayment?.status || 'unpaid'}
                 className="text-[11px] px-2 py-0.5"
-              >
-                {latestPayment?.status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
-              </Badge>
+              />
             </div>
 
             <div>
@@ -233,6 +235,21 @@ export function AdminOrderDetailPage() {
                 </span>
               </div>
             </div>
+
+            {latestPayment?.status === 'paid' && (
+              <div className="pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setRefundDialogOpen(true)}
+                  className="w-full text-xs h-8 border-purple-500/40 text-purple-700 dark:text-purple-400 hover:bg-purple-500/10 flex items-center justify-center gap-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Hoàn tiền giao dịch</span>
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -335,6 +352,18 @@ export function AdminOrderDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Refund dialog */}
+      {latestPayment && (
+        <RefundPaymentDialog
+          open={refundDialogOpen}
+          onOpenChange={setRefundDialogOpen}
+          paymentId={latestPayment.id}
+          orderCode={order.orderCode}
+          maxAmount={latestPayment.amount || order.totalAmount}
+          onSuccess={() => refetch()}
+        />
+      )}
     </div>
   );
 }

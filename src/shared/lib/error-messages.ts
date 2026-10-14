@@ -42,6 +42,14 @@ const ERROR_MESSAGES: Record<string, string> = {
   // Orders
   ORDER_NOT_FOUND: 'Không tìm thấy thông tin đơn hàng.',
   ORDER_NOT_CANCELLABLE: 'Không thể hủy đơn hàng ở giai đoạn này.',
+
+  // Payments
+  PAYMENT_NOT_FOUND: 'Không tìm thấy thông tin giao dịch thanh toán.',
+  PAYMENT_ALREADY_PAID: 'Giao dịch thanh toán này đã được hoàn tất trước đó.',
+  PAYMENT_AMOUNT_MISMATCH: 'Số tiền thanh toán không khớp với đơn hàng.',
+  PAYMENT_NOT_REFUNDABLE: 'Giao dịch thanh toán không đủ điều kiện để hoàn tiền.',
+  PROVIDER_NOT_SUPPORTED: 'Cổng thanh toán này hiện chưa được hỗ trợ.',
+  REFUND_FAILED: 'Yêu cầu hoàn tiền không thành công. Vui lòng thử lại.',
 };
 
 export function getErrorMessage(code: string, fallback = 'Đã có lỗi xảy ra. Vui lòng thử lại.'): string {

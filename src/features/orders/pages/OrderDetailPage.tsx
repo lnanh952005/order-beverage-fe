@@ -22,6 +22,11 @@ import {
 } from '../components';
 import { useOrder } from '../hooks/useOrder';
 import { useCancelOrder } from '../hooks/useCancelOrder';
+import {
+  PaymentReturnBanner,
+  PayNowButton,
+  PaymentStatusBadge,
+} from '@/features/payments';
 
 export function OrderDetailPage() {
   const { orderCode } = useParams<{ orderCode: string }>();
@@ -89,6 +94,9 @@ export function OrderDetailPage() {
         </Button>
       </div>
 
+      {/* Payment Gateway Return Banner */}
+      <PaymentReturnBanner />
+
       {/* Order Header Card */}
       <Card className="border border-border/80 shadow-sm overflow-hidden">
         <CardContent className="p-6">
@@ -139,12 +147,10 @@ export function OrderDetailPage() {
 
             <div>
               <span className="text-muted-foreground block mb-0.5">Trạng thái TT:</span>
-              <Badge
-                variant={latestPayment?.status === 'paid' ? 'success' : 'secondary'}
+              <PaymentStatusBadge
+                status={latestPayment?.status || 'unpaid'}
                 className="text-[11px] px-2 py-0.5"
-              >
-                {latestPayment?.status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
-              </Badge>
+              />
             </div>
 
             <div>
@@ -232,6 +238,15 @@ export function OrderDetailPage() {
                 </span>
               </div>
             </div>
+
+            {order.status !== 'cancelled' && latestPayment?.status !== 'paid' && order.payments?.[0]?.method !== 'cod' && (
+              <div className="pt-2">
+                <PayNowButton
+                  paymentId={latestPayment?.id}
+                  className="w-full text-xs py-2 h-9"
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
