@@ -4,6 +4,7 @@ export interface Category {
   id: number;
   name: string;
   slug: string;
+  imageUrl?: string | null;
   sortOrder: number;
   isActive: boolean;
   createdAt?: string;
@@ -135,6 +136,7 @@ export interface UpdateProductInput {
 export interface CreateCategoryInput {
   name: string;
   slug: string;
+  imageUrl?: string | null | undefined;
   sortOrder?: number | undefined;
   isActive?: boolean | undefined;
 }
@@ -142,6 +144,7 @@ export interface CreateCategoryInput {
 export interface UpdateCategoryInput {
   name?: string | undefined;
   slug?: string | undefined;
+  imageUrl?: string | null | undefined;
   sortOrder?: number | undefined;
   isActive?: boolean | undefined;
 }

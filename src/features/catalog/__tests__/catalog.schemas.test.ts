@@ -12,6 +12,7 @@ describe('catalog.schemas', () => {
       const result = categoryFormSchema.safeParse({
         name: 'Trà Sữa',
         slug: 'tra-sua',
+        imageUrl: 'https://images.unsplash.com/photo-1558857563-b37fe4355529',
         sortOrder: 1,
         isActive: true,
       });

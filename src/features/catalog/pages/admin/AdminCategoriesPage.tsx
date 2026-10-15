@@ -95,6 +95,7 @@ export function AdminCategoriesPage() {
             <table className="w-full text-left text-sm">
               <thead className="border-b border-border bg-muted/40 text-xs font-semibold uppercase text-muted-foreground">
                 <tr>
+                  <th className="px-5 py-3.5 w-16">Hình ảnh</th>
                   <th className="px-5 py-3.5">Tên danh mục</th>
                   <th className="px-5 py-3.5">Slug (URL)</th>
                   <th className="px-5 py-3.5 text-center">Thứ tự</th>
@@ -105,6 +106,22 @@ export function AdminCategoriesPage() {
               <tbody className="divide-y divide-border">
                 {categories.map((cat) => (
                   <tr key={cat.id} className="hover:bg-muted/20 transition-colors">
+                    <td className="px-5 py-4">
+                      {cat.imageUrl ? (
+                        <img
+                          src={cat.imageUrl}
+                          alt={cat.name}
+                          className="h-10 w-10 rounded-lg object-cover border border-border/60 bg-muted/20"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary/70 border border-primary/20">
+                          <FolderTree className="h-5 w-5" />
+                        </div>
+                      )}
+                    </td>
                     <td className="px-5 py-4 font-semibold text-foreground">
                       {cat.name}
                     </td>

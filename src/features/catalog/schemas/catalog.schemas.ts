@@ -10,6 +10,7 @@ export const categoryFormSchema = z.object({
     .min(1, 'Đường dẫn (slug) không được để trống')
     .max(120, 'Slug không quá 120 ký tự')
     .regex(slugRegex, 'Slug chỉ chứa chữ thường, số và dấu gạch nối (ví dụ: tra-sua)'),
+  imageUrl: z.string().trim().max(500, 'Đường dẫn hình ảnh không quá 500 ký tự').optional(),
   sortOrder: z.number().int().min(0, 'Thứ tự phải lớn hơn hoặc bằng 0').optional(),
   isActive: z.boolean().optional(),
 });

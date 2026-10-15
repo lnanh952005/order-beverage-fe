@@ -67,22 +67,35 @@ export function HomePage() {
         </div>
 
         {isCategoriesLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="h-24 rounded-2xl" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} className="h-28 rounded-2xl" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 to={`${ROUTE_PATHS.MENU}?category=${category.slug}`}
                 className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-border/70 bg-card hover:border-primary/50 hover:shadow-md hover:shadow-primary/5 transition-all text-center"
               >
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-3">
-                  <CupSoda className="h-6 w-6" />
-                </div>
+                {category.imageUrl ? (
+                  <div className="h-16 w-16 rounded-2xl overflow-hidden mb-3 border border-border/50 bg-muted/20 group-hover:scale-105 group-hover:shadow-md transition-all shrink-0">
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-3">
+                    <CupSoda className="h-6 w-6" />
+                  </div>
+                )}
                 <span className="font-semibold text-sm sm:text-base group-hover:text-primary transition-colors">
                   {category.name}
                 </span>

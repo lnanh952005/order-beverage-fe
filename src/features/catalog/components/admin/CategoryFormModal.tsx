@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Upload } from 'lucide-react';
+import { toast } from 'sonner';
+import { uploadService } from '@/shared/services/upload.service';
 import {
   Dialog,
   DialogContent,
@@ -51,12 +54,43 @@ export function CategoryFormModal({
     defaultValues: {
       name: '',
       slug: '',
+      imageUrl: '',
       sortOrder: 0,
       isActive: true,
     },
   });
 
   const nameValue = watch('name');
+  const imageUrlValue = watch('imageUrl');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Vui lòng chọn file hình ảnh (JPEG, PNG, WEBP, GIF)');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Dung lượng ảnh tối đa 5MB');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const url = await uploadService.uploadImage(file);
+      setValue('imageUrl', url, { shouldValidate: true, shouldDirty: true });
+      toast.success('Tải ảnh lên Cloudinary thành công!');
+    } catch {
+      toast.error('Không thể tải ảnh lên. Vui lòng thử lại.');
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
+    }
+  };
 
   useEffect(() => {
     if (open) {
@@ -64,6 +98,7 @@ export function CategoryFormModal({
         reset({
           name: initialData.name,
           slug: initialData.slug,
+          imageUrl: initialData.imageUrl || '',
           sortOrder: initialData.sortOrder,
           isActive: initialData.isActive,
         });
@@ -71,6 +106,7 @@ export function CategoryFormModal({
         reset({
           name: '',
           slug: '',
+          imageUrl: '',
           sortOrder: 0,
           isActive: true,
         });
@@ -87,23 +123,21 @@ export function CategoryFormModal({
   };
 
   const onSubmit = async (data: CategoryFormData) => {
+    const formattedData = {
+      name: data.name,
+      slug: data.slug,
+      imageUrl: data.imageUrl ? data.imageUrl.trim() : null,
+      sortOrder: data.sortOrder,
+      isActive: data.isActive,
+    };
+
     if (initialData) {
       await updateMutation.mutateAsync({
         id: initialData.id,
-        data: {
-          name: data.name,
-          slug: data.slug,
-          sortOrder: data.sortOrder,
-          isActive: data.isActive,
-        },
+        data: formattedData,
       });
     } else {
-      await createMutation.mutateAsync({
-        name: data.name,
-        slug: data.slug,
-        sortOrder: data.sortOrder,
-        isActive: data.isActive,
-      });
+      await createMutation.mutateAsync(formattedData);
     }
     onOpenChange(false);
   };
@@ -159,6 +193,56 @@ export function CategoryFormModal({
             />
             {errors.slug && (
               <p className="text-xs text-destructive">{errors.slug.message}</p>
+            )}
+          </div>
+
+          {/* Image URL & Preview */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="category-imageUrl">Đường dẫn hình ảnh (URL)</Label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={isUploading}
+                onClick={() => fileInputRef.current?.click()}
+                className="h-7 text-xs gap-1.5 cursor-pointer"
+              >
+                {isUploading ? <Spinner size={12} /> : <Upload className="w-3 h-3" />}
+                <span>{isUploading ? 'Đang tải...' : 'Tải ảnh từ máy'}</span>
+              </Button>
+            </div>
+            <Input
+              id="category-imageUrl"
+              placeholder="https://images.unsplash.com/..."
+              {...register('imageUrl')}
+            />
+            {errors.imageUrl && (
+              <p className="text-xs text-destructive">{errors.imageUrl.message}</p>
+            )}
+
+            {imageUrlValue && (
+              <div className="mt-2 flex items-center gap-3 p-2 rounded-xl border border-border/60 bg-muted/30">
+                <img
+                  src={imageUrlValue}
+                  alt="Xem trước hình ảnh"
+                  className="h-14 w-14 rounded-lg object-cover border border-border shrink-0 bg-background"
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+                <div className="text-xs text-muted-foreground truncate flex-1">
+                  <p className="font-medium text-foreground">Xem trước hình ảnh</p>
+                  <p className="truncate">{imageUrlValue}</p>
+                </div>
+              </div>
             )}
           </div>
 
