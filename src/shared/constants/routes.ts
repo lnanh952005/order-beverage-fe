@@ -12,6 +12,7 @@ export const ROUTE_PATHS = {
   ORDER_DETAIL: (orderCode: string) => `/orders/${orderCode}`,
   PROFILE: '/profile',
   ADDRESSES: '/profile/addresses',
+  VNPAY_RETURN: '/vnpay-return',
 
   // Admin routes
   ADMIN: '/admin',

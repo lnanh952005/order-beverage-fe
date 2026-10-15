@@ -73,6 +73,7 @@ export interface VNPayReturnResult {
   isVerified: boolean;
   message: string;
   paymentId?: number | null;
+  orderCode?: string | null;
   providerTxnId?: string | null;
   amount?: number | null;
   bankCode?: string | null;

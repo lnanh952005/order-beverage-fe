@@ -1,7 +1,14 @@
 import type { RouteObject } from 'react-router';
 
-// Customer gateway redirection returns to /orders/:orderCode, so payments feature has no separate customer routes
-export const paymentsRoutes: RouteObject[] = [];
+export const paymentsRoutes: RouteObject[] = [
+  {
+    path: 'vnpay-return',
+    lazy: async () => {
+      const { VNPayReturnPage } = await import('./pages/VNPayReturnPage');
+      return { Component: VNPayReturnPage };
+    },
+  },
+];
 
 export const paymentsAdminRoutes: RouteObject[] = [
   {
