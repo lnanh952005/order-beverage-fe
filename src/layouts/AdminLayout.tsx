@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -12,6 +12,7 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
+import { cn } from '@/shared/lib/utils';
 
 const ADMIN_NAV_ITEMS = [
   { label: 'Đơn hàng', path: ROUTE_PATHS.ADMIN_ORDERS, icon: ShoppingBag },
@@ -25,6 +26,12 @@ const ADMIN_NAV_ITEMS = [
 ];
 
 export function AdminLayout() {
+  const location = useLocation();
+
+  const isItemActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   return (
     <div className="flex min-h-screen bg-muted/20">
       {/* Sidebar */}
@@ -36,16 +43,23 @@ export function AdminLayout() {
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1.5">
           {ADMIN_NAV_ITEMS.map((item) => {
             const Icon = item.icon;
+            const active = isItemActive(item.path);
+
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                className={cn(
+                  'flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                  active
+                    ? 'bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/25'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:shadow-xs'
+                )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className={cn('h-4 w-4 shrink-0 transition-transform duration-200', active && 'scale-105')} />
                 <span>{item.label}</span>
               </Link>
             );
