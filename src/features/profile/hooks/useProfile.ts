@@ -34,6 +34,46 @@ export const useUpdateProfile = () => {
   });
 };
 
+export const useUploadAvatar = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (file: File) => profileService.uploadAvatar(file),
+    onSuccess: (updatedUser: User) => {
+      queryClient.setQueryData(profileKeys.user(), updatedUser);
+      useAuthStore.getState().setUser(updatedUser);
+      toast.success('Cập nhật ảnh đại diện thành công!');
+    },
+    onError: (error: unknown) => {
+      if (error instanceof ApiError) {
+        toast.error(error.message);
+      } else {
+        toast.error('Có lỗi xảy ra khi tải ảnh đại diện lên.');
+      }
+    },
+  });
+};
+
+export const useDeleteAvatar = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => profileService.deleteAvatar(),
+    onSuccess: (updatedUser: User) => {
+      queryClient.setQueryData(profileKeys.user(), updatedUser);
+      useAuthStore.getState().setUser(updatedUser);
+      toast.success('Đã xóa ảnh đại diện thành công!');
+    },
+    onError: (error: unknown) => {
+      if (error instanceof ApiError) {
+        toast.error(error.message);
+      } else {
+        toast.error('Có lỗi xảy ra khi xóa ảnh đại diện.');
+      }
+    },
+  });
+};
+
 export const useUnlinkGoogle = () => {
   const queryClient = useQueryClient();
 

@@ -16,6 +16,20 @@ export const profileService = {
     return httpClient.patch<User>('/profile', data);
   },
 
+  uploadAvatar: (file: File): Promise<User> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return httpClient.post<User>('/profile/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+
+  deleteAvatar: (): Promise<User> => {
+    return httpClient.delete<User>('/profile/avatar');
+  },
+
   getAddresses: (): Promise<Address[]> => {
     return httpClient.get<Address[]>('/profile/addresses');
   },

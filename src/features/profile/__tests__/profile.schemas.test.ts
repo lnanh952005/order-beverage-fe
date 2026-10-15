@@ -21,6 +21,15 @@ describe('profile.schemas', () => {
       expect(result.success).toBe(true);
     });
 
+    it('allows whitespace-only avatarUrl and phone as empty', () => {
+      const result = updateProfileSchema.safeParse({
+        fullName: 'Nguyễn Văn An',
+        phone: '   ',
+        avatarUrl: '   ',
+      });
+      expect(result.success).toBe(true);
+    });
+
     it('rejects empty fullName', () => {
       const result = updateProfileSchema.safeParse({
         fullName: '   ',

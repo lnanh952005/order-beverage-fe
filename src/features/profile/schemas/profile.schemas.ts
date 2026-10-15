@@ -15,8 +15,10 @@ export const updateProfileSchema = z.object({
   avatarUrl: z
     .string()
     .trim()
-    .url('Đường dẫn ảnh đại diện không hợp lệ')
     .max(500, 'Đường dẫn ảnh tối đa 500 ký tự')
+    .refine((val) => !val || /^https?:\/\/.+/.test(val), {
+      message: 'Đường dẫn ảnh đại diện không hợp lệ',
+    })
     .optional()
     .or(z.literal('')),
 });
