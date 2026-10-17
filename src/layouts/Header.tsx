@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
-  Coffee,
   User as UserIcon,
   LogOut,
   ShieldCheck,
@@ -13,6 +12,7 @@ import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { useAuth } from '@/features/auth';
 import { CartBadge } from '@/features/cart';
+import { BrandLogo } from '@/shared/components/brand';
 
 function getUserInitials(name: string): string {
   if (!name) return 'U';
@@ -52,10 +52,18 @@ export function Header() {
         {/* Brand Logo */}
         <Link
           to={ROUTE_PATHS.HOME}
-          className="flex items-center gap-2 font-bold text-xl text-primary"
+          className="flex items-center gap-3 group transition-opacity hover:opacity-90"
+          aria-label="The Beverage - Trang chủ"
         >
-          <Coffee className="h-6 w-6" />
-          <span>Beverage Hub</span>
+          <BrandLogo variant="symbol" className="h-9 w-9 transition-transform duration-200 group-hover:scale-105" symbolColor="#C25E2E" />
+          <div className="flex flex-col">
+            <span className="font-serif font-bold text-lg leading-none tracking-wide text-foreground">
+              The Beverage
+            </span>
+            <span className="text-[10px] uppercase font-medium tracking-widest text-muted-foreground mt-0.5">
+              Artisanal Coffee &amp; Tea
+            </span>
+          </div>
         </Link>
 
         {/* Navigation */}

@@ -1,0 +1,40 @@
+{
+  "brand": "The Beverage",
+  "tagline": "Handcrafted Taste & Purity",
+  "brief": "Bộ nhận diện thương hiệu đặt đồ uống trực tuyến cao cấp, lấy cảm hứng từ nét đẹp gốm mộc thủ công, nghệ thuật pha chế tinh tế và nguồn nguyên liệu trà, cà phê organic thuần khiết.",
+  "adjectives": [
+    "artisanal",
+    "organic",
+    "warm",
+    "refined",
+    "timeless"
+  ],
+  "criteria": "Biểu tượng nhận diện trường tồn, dễ nhận biết ở 16px, hoạt động xuất sắc trên bao bì, ly gốm, ứng dụng di động và website.",
+  "industry": "coffee",
+  "brand_color": "#C25E2E",
+  "greyscale": false,
+  "final": true,
+  "round": 2,
+  "designer": "Senior Brand Identity",
+  "concepts": [
+    {
+      "name": "The Artisan Woodblock Seal",
+      "symbol": "../the-beverage-symbol.svg",
+      "lockup": "../the-beverage-horizontal.svg",
+      "stacked": "../the-beverage-vertical.svg",
+      "idea": "Dấu ấn mộc thủ công hình tròn: tách gốm thử nếm và giọt tinh chất chiết xuất trong không gian âm.",
+      "rationale": [
+        "Cấu trúc dấu triện tròn kinh điển mang lại sự tin cậy, ấm áp và dấu ấn thủ công cao cấp",
+        "Hình tượng tách gốm và giọt hương vị khắc âm độc bản, không bị lẫn với các clip-art thông thường",
+        "Tỉ lệ hình học cân xứng hoàn hảo, sắc nét tuyệt đối ở kích thước favicon 16px",
+        "Ứng dụng linh hoạt trên bao bì giấy kraft, ly sứ, tem niêm phong và giao diện số"
+      ]
+    }
+  ],
+  "recommendation": "The Artisan Woodblock Seal là lựa chọn xuất sắc nhất, hội tụ đầy đủ tinh thần thủ công, tính độc bản và khả năng nhận diện cao.",
+  "next_steps": [
+    "Logo kit đã được xuất đầy đủ (Master SVG, PNG, Web Icons)",
+    "Favicon và manifest đã được tích hợp vào fe/index.html",
+    "BrandLogo component đã được tích hợp vào Header và Admin Layout"
+  ]
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 256" width="980" height="256" role="img">
+  <g transform="translate(24, 0)">
+    <path fill="#1A1A1A" fill-rule="evenodd" d="
+      M 54 36 L 138 36 C 178 36 204 58 204 92 C 204 114 188 128 166 134 C 196 140 216 160 216 190 C 216 222 184 230 140 230 L 54 230 C 48 230 44 226 44 220 L 44 46 C 44 40 48 36 54 36 Z
+      M 96 66 L 134 66 C 154 66 166 76 166 92 C 166 108 154 118 134 118 L 96 118 Z
+      M 96 146 L 138 146 C 162 146 176 158 176 182 C 176 200 162 208 136 208 L 96 208 Z
+    "/>
+  </g>
+  <text x="290" y="130" font-family="'Playfair Display', 'Cinzel', 'Baskerville', 'Georgia', serif" font-size="52" font-weight="700" letter-spacing="3" fill="#1A1A1A">THE BEVERAGE</text>
+  <text x="294" y="172" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="500" letter-spacing="6" fill="#71717A">ARTISANAL COFFEE &amp; CRAFT TEA</text>
+</svg>

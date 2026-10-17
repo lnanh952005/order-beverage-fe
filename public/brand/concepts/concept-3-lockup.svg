@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 256" width="980" height="256" role="img">
+  <g transform="translate(24, 0)">
+    <path fill="#1A1A1A" d="
+      M 36 128 C 42 184 84 216 128 216 C 172 216 214 184 220 128 C 192 138 160 144 128 144 C 96 144 64 138 36 128 Z
+    "/>
+    <rect x="108" y="222" width="40" height="6" rx="3" fill="#1A1A1A"/>
+    <path fill="#1A1A1A" d="
+      M 116 114 C 114 78 92 54 68 46 C 66 74 86 104 116 114 Z
+    "/>
+    <path fill="#1A1A1A" d="
+      M 140 114 C 142 78 164 54 188 46 C 190 74 170 104 140 114 Z
+    "/>
+    <path fill="#1A1A1A" d="
+      M 128 28 C 134 42 144 54 144 66 A 16 16 0 1 1 112 66 C 112 54 122 42 128 28 Z
+    "/>
+  </g>
+  <text x="290" y="130" font-family="'Playfair Display', 'Cinzel', 'Baskerville', 'Georgia', serif" font-size="52" font-weight="700" letter-spacing="3" fill="#1A1A1A">THE BEVERAGE</text>
+  <text x="294" y="172" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="500" letter-spacing="6" fill="#71717A">ORGANIC INFUSIONS &amp; ROASTS</text>
+</svg>

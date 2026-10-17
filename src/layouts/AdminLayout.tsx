@@ -1,6 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router';
 import {
-  LayoutDashboard,
   ShoppingBag,
   Layers,
   SlidersHorizontal,
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react';
 import { ROUTE_PATHS } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
+import { BrandLogo } from '@/shared/components/brand';
 
 const ADMIN_NAV_ITEMS = [
   { label: 'Đơn hàng', path: ROUTE_PATHS.ADMIN_ORDERS, icon: ShoppingBag },
@@ -36,10 +36,13 @@ export function AdminLayout() {
     <div className="flex min-h-screen bg-muted/20">
       {/* Sidebar */}
       <aside className="w-64 border-r bg-card flex flex-col">
-        <div className="p-6 border-b flex items-center justify-between">
-          <Link to={ROUTE_PATHS.ADMIN_ORDERS} className="flex items-center gap-2 font-bold text-lg text-primary">
-            <LayoutDashboard className="h-5 w-5" />
-            <span>Admin Portal</span>
+        <div className="p-5 border-b flex items-center justify-between">
+          <Link to={ROUTE_PATHS.ADMIN_ORDERS} className="flex items-center gap-2.5 group">
+            <BrandLogo variant="symbol" className="h-7 w-7 transition-transform group-hover:scale-105" symbolColor="#C25E2E" />
+            <div className="flex flex-col">
+              <span className="font-serif font-bold text-base leading-tight text-foreground">The Beverage</span>
+              <span className="text-[10px] uppercase font-medium tracking-wider text-muted-foreground">Admin Portal</span>
+            </div>
           </Link>
         </div>
 

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-c2">
+  <title id="title-c2">The Beverage Concept 2 - The Artisan Seal</title>
+  <path fill="#1A1A1A" fill-rule="evenodd" d="
+    M 128 16
+    A 112 112 0 1 1 127.9 16
+    Z
+    M 74 116
+    L 182 116
+    C 182 166 156 196 128 196
+    C 100 196 74 166 74 116
+    Z
+    M 90 208
+    L 166 208
+    C 170 208 172 210 172 213
+    C 172 216 170 218 166 218
+    L 90 218
+    C 86 218 84 216 84 213
+    C 84 210 86 208 90 208
+    Z
+    M 128 46
+    C 134 58 144 68 144 80
+    A 16 16 0 1 1 112 80
+    C 112 68 122 58 128 46
+    Z
+  "/>
+</svg>
